@@ -48,5 +48,6 @@ invoke-rc.d tomcat start appli['name']
 wq
 EOF
   EOH
+ end
 end
 
