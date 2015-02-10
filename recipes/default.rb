@@ -68,6 +68,6 @@ i=20; node['chef-tomcat-appli']['list'].each do |appli|
    notifies :enable, "service[#{appli['name']}]", :immediately
    notifies :start,  "service[#{appli['name']}]", :immediately
  end
-
+ i += 1
 end
 
