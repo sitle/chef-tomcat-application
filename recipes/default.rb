@@ -28,46 +28,47 @@ service node['tomcat']['base_version'] do
   action [:enable, :start]
 end
 
-i=20; node['chef-tomcat-appli']['list'].each do |appli|
- bash "wget" do
-  user "root"
-  cwd node['chef-tomcat-appli']['root']
-  code <<-EOH
-   mkdir -p "#{appli['name']}/webapps"
-   cd "#{appli['name']}/webapps" && wget appli['url']
-  EOH
- end
+i = 20
 
-# bash "rc.local" do
-#  user "root"
-#  code << -EOH
-#   grep -w appli['name'] /etc/rc.local || ed /etc/rc.local <<EOF
-#/exit
-#i
-#invoke-rc.d tomcat start appli['name']
-#wq
-#EOF
-#  EOH
-# end
+node['chef-tomcat-appli']['list'].each do |appli|
+  bash 'wget' do
+    user 'root'
+    cwd node['chef-tomcat-appli']['root']
+    code <<-EOH
+    mkdir -p '#{appli['name']}/webapps'
+    cd '#{appli['name']}/webapps' && wget appli['url']
+    EOH
+  end
 
- service appli['name'] do
-  supports :status => true, :restart => false, :reload => false
-  priority 2 => [:start, i], 0 => [:stop, 20], 1 => [:stop, 20], 6 => [:stop, 20]
- end
+  # bash 'rc.local' do
+  #  user 'root'
+  #  code << -EOH
+  #   grep -w appli['name'] /etc/rc.local || ed /etc/rc.local <<EOF
+  # /exit
+  # i
+  # invoke-rc.d tomcat start appli['name']
+  # wq
+  # EOF
+  #  EOH
+  # end
 
- template "/etc/init.d/#{appli['name']}" do
-  source 'service.erb'
-  mode '0755'
-  owner 'root'
-  group 'root'
-  variables({
-   :date => Time.now,
-   :portal => appli['name']
-  })
-  action appli['disabled'] ? :delete : :create
-  notifies :enable, "service[#{appli['name']}]", :immediately
-  notifies :start,  "service[#{appli['name']}]", :immediately
- end
- i += 1
+  service appli['name'] do
+    supports status: true, restart: false, reload: false
+    priority 2 => [:start, i], 0 => [:stop, 20], 1 => [:stop, 20], 6 => [:stop, 20]
+  end
+
+  template "/etc/init.d/#{appli['name']}" do
+    source 'service.erb'
+    mode '0755'
+    owner 'root'
+    group 'root'
+    variables(
+      date: Time.now,
+      portal: appli['name']
+    )
+    action appli['disabled'] ? :delete : :create
+    notifies :enable, "service[#{appli['name']}]", :immediately
+    notifies :start, "service[#{appli['name']}]", :immediately
+  end
+  i += 1
 end
-
