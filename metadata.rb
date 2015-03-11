@@ -7,5 +7,3 @@ long_description 'Installs/Configures chef-tomcat-appli'
 version '0.1.0'
 
 depends 'apt'
-depends 'java'
-depends 'tomcat'

@@ -18,25 +18,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Java & Tomcat installations
-#
-include_recipe 'java::default'
-include_recipe 'tomcat::default'
-
-service node['tomcat']['base_version'] do
-  supports status: true, restart: true, reload: true
-  action [:enable, :start]
+package node['chef-tomcat-appli']['tomcat_version'] do
+ action :install
 end
 
 i = 20
-
 node['chef-tomcat-appli']['list'].each do |appli|
   bash 'wget' do
     user 'root'
     cwd node['chef-tomcat-appli']['root']
     code <<-EOH
-    mkdir -p '#{appli['name']}/webapps'
-    cd '#{appli['name']}/webapps' && wget appli['url']
+    mkdir -p '#{node['chef-tomcat-appli']['root']}/#{appli['name']}/webapps'
+    cd '#{node['chef-tomcat-appli']['root']}/#{appli['name']}/webapps' && wget appli['url']
     EOH
   end
 
