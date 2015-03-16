@@ -28,8 +28,8 @@ node['chef-tomcat-appli']['list'].each do |appli|
     user 'root'
     cwd node['chef-tomcat-appli']['root']
     code <<-EOH
-    mkdir -p '#{node['chef-tomcat-appli']['root']}/#{appli['name']}/webapps'
-    cd '#{node['chef-tomcat-appli']['root']}/#{appli['name']}/webapps' && wget appli['url']
+    mkdir -p '#{appli['name']}/webapps'
+    cd '#{appli['name']}/webapps' && wget appli['url']
     EOH
   end
 
@@ -57,11 +57,11 @@ node['chef-tomcat-appli']['list'].each do |appli|
     group 'root'
     variables(
       date: Time.now,
-      portal: "tomcat $* #{appli['name']"
+      name: "#{node['chef-tomcat-appli']['tomcat_version']} $* #{appli['name']}"
     )
     action appli['disabled'] ? :delete : :create
     notifies :enable, "service[#{appli['name']}]", :immediately
-    notifies :start, "service[#{appli['name']}]", :immediately
+    notifies :start,  "service[#{appli['name']}]", :immediately
   end
   i += 1
 end
