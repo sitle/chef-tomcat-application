@@ -19,7 +19,7 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin
 
 case "$1" in
 start|stop|status)
- invoke-rc.d tomcat $* <%= @name %>
+ invoke-rc.d <%= @name %>
  ;;
 *)
  echo "Syntaxe: $(basename $0) [start|stop|status]..." && false

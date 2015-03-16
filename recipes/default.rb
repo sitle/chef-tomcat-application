@@ -57,7 +57,7 @@ node['chef-tomcat-appli']['list'].each do |appli|
     group 'root'
     variables(
       date: Time.now,
-      portal: appli['name']
+      portal: "tomcat $* #{appli['name']"
     )
     action appli['disabled'] ? :delete : :create
     notifies :enable, "service[#{appli['name']}]", :immediately
