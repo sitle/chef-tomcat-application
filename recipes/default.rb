@@ -27,10 +27,7 @@ node['chef-tomcat-appli']['list'].each do |appli|
   bash 'wget' do
     user 'root'
     cwd node['chef-tomcat-appli']['root']
-    code <<-EOH
-    mkdir -p '#{appli['name']}/webapps'
-    cd '#{appli['name']}/webapps' && wget appli['url']
-    EOH
+    code "mkdir -p \"#{appli['name']}/webapps\"; cd \"#{appli['name']}/webapps\" && wget #{appli['url']}"
   end
 
   # bash 'rc.local' do
