@@ -1,7 +1,7 @@
 #
-# Cookbook Name:: chef-tomcat-appli
-# Attributes:: chef-tomcat-appli
+# Cookbook Name:: chef-tomcat-application
+# Attributes:: chef-tomcat-application
 #
-default['chef-tomcat-appli']['tomcat_version'] = 'tomcat7'
-default['chef-tomcat-appli']['root'] = '/opt'
-default['chef-tomcat-appli']['list'] = []
+default['chef-tomcat-application']['tomcat_version'] = 'tomcat7'
+default['chef-tomcat-application']['root'] = '/opt'
+default['chef-tomcat-application']['list'] = []

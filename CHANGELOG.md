@@ -1,3 +1,3 @@
 # 0.1.0
 
-Initial release of chef-tomcat-appli
+Initial release of chef-tomcat-application

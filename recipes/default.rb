@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: chef-tomcat-appli
+# Cookbook Name:: chef-tomcat-application
 # Recipe:: default
 #
 # Copyright (C) 2015 PE, pf.
@@ -18,15 +18,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-package node['chef-tomcat-appli']['tomcat_version'] do
+package node['chef-tomcat-application']['tomcat_version'] do
  action :install
 end
 
 i = 20
-node['chef-tomcat-appli']['list'].each do |appli|
+node['chef-tomcat-application']['list'].each do |appli|
   bash 'wget' do
     user 'root'
-    cwd node['chef-tomcat-appli']['root']
+    cwd node['chef-tomcat-application']['root']
     code "mkdir -p \"#{appli['name']}/webapps\"; cd \"#{appli['name']}/webapps\" && wget #{appli['url']}"
   end
 
@@ -54,7 +54,7 @@ node['chef-tomcat-appli']['list'].each do |appli|
     group 'root'
     variables(
       date: Time.now,
-      name: "#{node['chef-tomcat-appli']['tomcat_version']} $* #{appli['name']}"
+      name: "#{node['chef-tomcat-application']['tomcat_version']} $* #{appli['name']}"
     )
     action appli['disabled'] ? :delete : :create
     notifies :enable, "service[#{appli['name']}]", :immediately
